@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(45deg, #57003f 0%,#f57453 100%);
+  font-family: 'Ubuntu';
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+}
