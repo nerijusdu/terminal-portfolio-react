@@ -64,6 +64,7 @@
   margin-top: -1px;
   padding-top: 2px;
   font-family: 'Ubuntu mono';
+  overflow-y: auto;
 }
 .Terminal__text {
   color: #ddd;
@@ -90,6 +91,12 @@
   display: block;
   margin-left: 8px;
   animation: 2000ms ease infinite alternate blink;
+}
+
+.Terminal__input {
+  width: 100%;
+  background: transparent;
+  border: none;
 }
 
 @keyframes blink {
