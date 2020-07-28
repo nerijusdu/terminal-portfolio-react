@@ -5,13 +5,13 @@ import useTerminalHistory from './hooks/useTerminalHistory';
 import TerminalPrompt from './TerminalPrompt';
 
 export default () => {
-  const terminalObj = useTerminalHistory([{text: 'Welcome!'}]);
-  const command = useFormInput('', e => {
+  const terminalObj = useTerminalHistory([{text: 'Welcome! Type \'help\' to get you started.'}]);
+  const command = useFormInput('', async e => {
     if (e.key !== 'Enter') {
       return;
     }
 
-    commandHandler(terminalObj, command.value);
+    await commandHandler(terminalObj, command.value);
     command.onChange({target: {value: ''}});
 
     setTimeout(
@@ -34,7 +34,7 @@ export default () => {
           showUser={item.showUser}
           currentPath={item.currentPath}
         >
-          <div className="Terminal__text">{item.text}</div>
+          <span className="Terminal__text">{item.text}</span>
         </TerminalPrompt>
       ))}
       <TerminalPrompt showUser={true}>

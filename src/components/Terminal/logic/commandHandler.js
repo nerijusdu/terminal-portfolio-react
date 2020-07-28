@@ -2,7 +2,7 @@ import commands from './commandDefinitions';
 
 const noCommandFoundMessage = (name) => `${name}: command not found`;
 
-export default (terminal, commandString) => {
+export default async (terminal, commandString) => {
   if (!commandString) {
     return;
   }
@@ -17,7 +17,7 @@ export default (terminal, commandString) => {
     return;
   }
 
-  const preventCommit = command(terminal, args, commandString);
+  const preventCommit = await command(terminal, args, commandString);
   if (preventCommit !== true) {
     terminal.commit();
   }

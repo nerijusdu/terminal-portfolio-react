@@ -1,9 +1,27 @@
+import commandDescriptions from './commandDescriptions';
+
 export default {
   clear: (terminal) => {
     terminal.clear();
     return true;
   },
   pwd: (terminal) => terminal.append(terminal.context.currentPath),
+  help: (terminal) => {
+    const nameLength = 10;
+    Object.keys(commandDescriptions).forEach(key => {
+      const command = commandDescriptions[key];
+      const name = key.padEnd(nameLength, ' ');
+      
+      if (typeof(command) === 'string') {
+        terminal.append(`${name} - ${command}`);
+      }
+      else {
+        terminal.append(`${name} - ${command.description}`)
+        terminal.append('  arguments: ');
+        command.args.forEach(arg => terminal.append(`  - ${arg}`));
+      }
+    })
+  },
   ls: (terminal, args) => {
     const allDirs = terminal.context.directories;
     const searchPath = args.length === 0
@@ -48,10 +66,39 @@ export default {
     }
 
     terminal.append(`cd: ${args[0]}: No such file or directory`);
+  },
+  cat: async (terminal, args) => {
+    if (args.length === 0) {
+      terminal.append('cat: No file specified');
+      return;
+    }
+
+    const allDirs = terminal.context.directories;
+    const path = getFullPath(terminal, args[0]);
+    const file = splitFilePath(path);
+    if (!Object.keys(allDirs).includes(file.dir) ||
+        allDirs[file.dir].isRestricted ||
+        !allDirs[file.dir].files.includes(file.name)) {
+      terminal.append(`cat: ${args}: No such file`)
+      return;
+    }
+
+    const res = await fetch(`${process.env.PUBLIC_URL}/data/${file.name}`);
+    const data = await res.text();
+    terminal.append(data);
   }
 };
 
-const getFullPath = (terminal, dir) => dir.startsWith('/')
-  ? dir 
-  : `${terminal.context.currentPath}/${dir}`;
+const getFullPath = (terminal, path) => path.startsWith('/')
+  ? path 
+  : `${terminal.context.currentPath}/${path}`;
 
+const splitFilePath = (path) => {
+  let fileStart = path.lastIndexOf('/');
+  if (fileStart === -1) fileStart = 0;
+
+  const name = path.substr(fileStart + 1);
+  const dir = path.substr(0, fileStart);
+
+  return { name, dir };
+}

@@ -69,6 +69,7 @@
 .Terminal__text {
   color: #ddd;
   margin-left: 1px;
+  white-space: pre-wrap;
 }
 
 .Terminal__Prompt {
