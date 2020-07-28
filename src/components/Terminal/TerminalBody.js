@@ -1,15 +1,17 @@
 import React, { useRef } from 'react';
-import commandHandler from '../../terminal/commandHandler';
-import useFormInput from '../../hooks/useFormInput'
-import useTerminalHistory from '../../hooks/useTerminalHistory'
+import commandHandler from './logic/commandHandler';
+import useFormInput from '../../hooks/useFormInput';
+import useTerminalHistory from './hooks/useTerminalHistory';
+import TerminalPrompt from './TerminalPrompt';
 
 export default () => {
+  const terminalObj = useTerminalHistory([{text: 'Welcome!'}]);
   const command = useFormInput('', e => {
     if (e.key !== 'Enter') {
       return;
     }
 
-    commandHandler(terminalHistory, command.value);
+    commandHandler(terminalObj, command.value);
     command.onChange({target: {value: ''}});
 
     setTimeout(
@@ -19,7 +21,6 @@ export default () => {
   });
   const inputRef = useRef(null);
   const containerRef = useRef(null);
-  const terminalHistory = useTerminalHistory(['Welcome!']);
 
   return (
     <div
@@ -27,19 +28,22 @@ export default () => {
       onClick={() => inputRef.current.focus()}
       ref={containerRef}
     >
-      {terminalHistory.items.map((text, index) => (
-        <div className="Terminal__text" key={index}>{text}</div>
+      {terminalObj.items.map((item, index) => (
+        <TerminalPrompt
+          key={index}
+          showUser={item.showUser}
+          currentPath={item.currentPath}
+        >
+          <div className="Terminal__text">{item.text}</div>
+        </TerminalPrompt>
       ))}
-      <div className="Terminal__Prompt">
-        <span className="Prompt__user">nerijus@ubuntu:</span>
-        <span className="Prompt__location">~</span>
-        <span className="Prompt__dollar">$</span>
+      <TerminalPrompt showUser={true}>
         <input
           className="Terminal__text Terminal__input"
           ref={inputRef}
           {...command}
         />
-      </div>
+      </TerminalPrompt>
     </div>
   );
 };

@@ -7,12 +7,18 @@ export default (terminal, commandString) => {
     return;
   }
 
+  terminal.append(commandString, true);
+
   const [commandName, ...args] = commandString.split(' ');
   const command = commands[commandName];
   if (!command) {
     terminal.append(noCommandFoundMessage(commandName));
+    terminal.commit();
     return;
   }
 
-  command(terminal, args);
+  const preventCommit = command(terminal, args, commandString);
+  if (preventCommit !== true) {
+    terminal.commit();
+  }
 };

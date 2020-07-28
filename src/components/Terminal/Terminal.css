@@ -68,10 +68,10 @@
 }
 .Terminal__text {
   color: #ddd;
+  margin-left: 1px;
 }
 
 .Terminal__Prompt {
-  margin-top: 10px;
   display: flex;
 }
 
@@ -94,9 +94,15 @@
 }
 
 .Terminal__input {
-  width: 100%;
+  flex-grow: 1;
   background: transparent;
   border: none;
+  font-family: 'Ubuntu mono';
+  font-size: 16px;
+}
+
+.Terminal__input:focus {
+  outline: none;
 }
 
 @keyframes blink {
